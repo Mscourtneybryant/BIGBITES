@@ -18,7 +18,7 @@ export const Navbar = () =>{
            
             {/*to hold the logo*/}
                 <div className='lg:mr-10 cursor-pointer text-black flex items-center'>
-                    <li className='logo font-regular text-black-300 text-2xl'>
+                    <li className='logo font-regular text-black-300 text-2xl list-none'>
                         <span className="big">Big</span>Bites
                     </li>
 
