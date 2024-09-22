@@ -56,7 +56,14 @@ code {
 
 
 
-/*FOR TAILWIND CSS*/
+
+
+
+
+
+
+/*TAILWIND CSS*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

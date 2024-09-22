@@ -1,8 +1,8 @@
 const { createTheme } = require("@mui/material");
 
-export const darkTheme=createTheme({
+export const lightTheme=createTheme({
     palette:{
-        mode:"dark",
+        mode:"light",
         primary:{
             main:"#ffff00"
         },
