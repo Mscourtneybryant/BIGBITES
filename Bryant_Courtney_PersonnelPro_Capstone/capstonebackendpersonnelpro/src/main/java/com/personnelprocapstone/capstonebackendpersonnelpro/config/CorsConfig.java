@@ -7,6 +7,6 @@ import org.springframework.context.annotation.Configuration;
 public class CorsConfig {
 
     @Bean
-    public 
+    public
 
 }
