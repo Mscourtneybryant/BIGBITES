@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class UserService{
+class UsersService{
     static BASE_URL = "http://localhost:8080"
 
     static async login(email, password){
@@ -119,4 +119,4 @@ static adminOnly(){
 
 }
 
-export default UserService;
+export default UsersService;
