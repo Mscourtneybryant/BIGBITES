@@ -24,7 +24,6 @@ function App() {
             <Route exact path="/" element={<LoginPage />} />
             <Route exact path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-test
             {UsersService.adminOnly() && (
               <>
                 <Route path="/register" element={<RegistrationPage />} />
