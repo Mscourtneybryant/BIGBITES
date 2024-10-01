@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,7 +18,7 @@ const SignUp = () => {
                 email,
                 password
             });
-            history.push('/login'); // Redirect to login after successful signup
+            navigate('/login'); // Redirect to login after successful signup
         } catch (error) {
             console.error('Error during signup', error);
         }

@@ -1,44 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import SignIn from './components/SignIn'; 
-import HomePage from './components/Homepage'; 
-import NavBar from './components/NavBar'; 
-import SignUp from './components/SignUp'; 
-import { useSelector } from 'react-redux'; 
+import { BrowserRouter as Router, Routes, Route , Navigate} from 'react-router-dom';
+import SignIn from './components/SignIn';
+import Homepage from './components/Homepage';
+import NavBar from './components/NavBar';
+import SignUp from './components/SignUp';
+import { useSelector } from 'react-redux';
 
 const App = () => {
-    const user = useSelector(state => state.auth.user); 
-    
+    const user = useSelector((state) => state.auth.user);
+
     return (
         <Router>
             {/* Navbar will always be visible */}
             <NavBar />
-            
-            <Switch>
+
+            <Routes>
                 {/* Route for Login Page */}
-                <Route path="/login">
-                    {/* If user is logged in, redirect to homepage */}
-                    {user ? <Redirect to="/home" /> : <SignIn />}
-                </Route>
+                <Route path="/login" element={user ? <Navigate to="/home" /> : <SignIn />} />
 
                 {/* Route for Sign Up Page */}
-                <Route path="/signup">
-                    {user ? <Redirect to="/home" /> : <SignUp />}
-                </Route>
+                <Route path="/signup" element={user ? <Navigate to="/home" /> : <SignUp />} />
 
-                {/* Route for HomePage - Only accessible after login */}
-                <Route path="/home">
-                    {user ? <HomePage /> : <Redirect to="/login" />}
-                </Route>
+                {/* Route for HomePage - Only accessible after Login */}
+                <Route path="/home" element={user ? <Homepage /> : <Navigate to="/login" />} />
 
                 {/* Default Route */}
-                <Route exact path="/">
-                    {user ? <Redirect to="/home" /> : <Redirect to="/login" />}
-                </Route>
-            </Switch>
+                <Route path="*" element={user ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+            </Routes>
         </Router>
     );
 };
-
 export default App;
-
