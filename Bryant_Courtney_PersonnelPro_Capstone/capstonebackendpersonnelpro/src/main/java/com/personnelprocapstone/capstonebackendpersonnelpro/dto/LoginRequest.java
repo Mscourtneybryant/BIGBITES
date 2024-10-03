@@ -1,20 +1,20 @@
-package com.personnelprocapstone.capstonebackendpersonnelpro.Auth;
+package com.personnelprocapstone.capstonebackendpersonnelpro.dto;
 
-public class JwtRequest {
+
+public class LoginRequest {
     private String email;
     private String password;
 
     // Default constructor
-    public JwtRequest() {
-    }
+    public LoginRequest() {}
 
-    // Parameterized constructor
-    public JwtRequest(String email, String password) {
+    // Constructor with parameters
+    public LoginRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    // Getters and Setters
+    // Getters and setters
     public String getEmail() {
         return email;
     }

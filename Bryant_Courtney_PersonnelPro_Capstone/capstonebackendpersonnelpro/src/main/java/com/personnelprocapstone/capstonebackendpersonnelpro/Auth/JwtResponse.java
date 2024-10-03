@@ -13,7 +13,6 @@ public class JwtResponse {
         return token;
     }
 
-    // Optional: toString method for better readability when printing
     @Override
     public String toString() {
         return "JwtResponse{token='" + token + "'}";
