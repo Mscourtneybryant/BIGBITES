@@ -1,64 +1,22 @@
 import React from 'react';
 
-
-function Footer (){
+function Footer() {
     return (
         <div className="main-footer bg-secondary text-black main"> 
-        <div className="footer">
-        <div className="row">
-
-            {/* Column 1 */}
-            <div className="col-md-3 col-sm-6">
-                <h5>About Us</h5>
-                <ul className="list-unstyled text-dark">
-                    <li><a href="www.webdev.com" class="text-dark">Meet our Teachers</a></li>
-                    <li><a href="www.webdev.com" class="text-dark">View Cirriculum</a></li>
-                    <li><a href="www.webdev.com" class="text-dark">Schedule a Tour</a></li>
-                    <li><a href="www.webdev.com" class="text-dark">Students in Action</a></li>
-                    <li><a href="www.webdev.com" class="text-dark">Our History</a></li>
-                
-                </ul>
+            <div className="footer">
+                <div className="row">
+                    <div className="row-md">
+                        <div className=" bg-gray-800 pt-2 pb-2 text-white d-flex flex-wrap justify-content-space-between items-center">
+                            <a href="www.webdev.com" className="hover:text-hoverClr">About Us</a>
+                            <a href="www.personnelpro.com" className="hover:text-hoverClr mx-2">Privacy Policy</a>
+                            <a href="www.webdev.com" className="hover:text-hoverClr mx-2">Terms of Service</a>
+                            <a href="www.webdev.com" className="hover:text-hoverClr mx-2">Contact Us</a>
+                            <a href="www.webdev.com" className="hover:text-hoverClr mx-2">FAQs</a>
+                            <a href="www.webdev.com" className="hover:text-hoverClr mx-2">Career Opportunities</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            {/* Column 2 */}
-            <div className="col-md-3 col-sm-6">
-                <h5>Contact Us</h5>
-                <ul className="list-unstyled">
-                    <li>Email: admin@webdev.org</li>
-                    <li>Telephone: 555-5555</li>
-                    <li>Instagram: @WebDevHighSchool</li>
-                  
-                
-                </ul>
-            </div>
-
-            {/* Column 3 */}
-            <div className="col-md-3 col-sm-6">
-                <h5>WebDev HighSchool Education</h5>
-                <ul className="list-unstyled">
-                    <li><a href="www.webdev.com" class="text-dark">Full-Stack Focused Classes</a></li>
-                    <li><a href="www.webdev.com" class="text-dark">Front-end Focused Classes</a></li>
-                    <li><a href="www.webdev.com" class="text-dark">Back-end Focused Classes</a></li>
-                    <li><a href="www.webdev.com" class="text-dark">Apply to our school</a></li>
-                
-                </ul>
-            </div>
-            
-            {/* Column 4 */}
-            <div className="col-md-3 col-sm-6">
-                <h5>WebDev HighSchool Community</h5>
-                <ul className="list-unstyled">
-                    <li><a href="www.personnelpro.com" class="text-dark">Student Login</a></li>
-                    <li><a href="www.personnelpro.com" class="text-dark">Parent Signup Process</a></li>
-                    <li><a href="www.personnelpro.com" class="text-dark">Student Signup Process</a></li>
-                    <li><a href="www.personnelpro.com" class="text-dark">Newsletter</a></li>
-                    
-                    
-                
-                </ul>    
-        </div>
-        </div>
-        </div>
         </div>
     )
 }

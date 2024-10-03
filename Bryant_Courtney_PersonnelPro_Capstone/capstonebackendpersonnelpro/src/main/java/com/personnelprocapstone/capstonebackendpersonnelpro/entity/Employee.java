@@ -2,61 +2,27 @@ package com.personnelprocapstone.capstonebackendpersonnelpro.entity;
 
 import jakarta.persistence.*;
 
-
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-
-@Setter
-@Getter
 @Entity
 @Table(name = "employees")
-public class Employee implements UserDetails {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false)
     private String firstName;
-
-    @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @Column(name = "address", nullable = false)
     private String address;
-
-    @Column(name = "department")
     private String department;
-
-    @Column(name = "dob")
     private String dob;
-
-    @Column(name = "email", nullable = false, unique = true)
     private String email;
-
-    @Column(name = "notes")
     private String notes;
-
-    @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
-
-    @Column(name = "role")
     private String role;
 
     // Default constructor
-    public Employee() {
-    }
+    public Employee() {}
 
     // Constructor with all fields
     public Employee(String firstName, String lastName, String address, String department, String dob, String email, String notes, String password, String phoneNumber, String role) {
@@ -72,62 +38,107 @@ public class Employee implements UserDetails {
         this.role = role;
     }
 
-    // UserDetails interface methods
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role.toUpperCase()));
+    // Getters and setters
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public String getUsername() {
-        return this.email;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public String getFirstName() {
+        return firstName;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public String getLastName() {
+        return lastName;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    // equals method
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return Objects.equals(id, employee.id) &&
-                Objects.equals(email, employee.email);
+    public String getAddress() {
+        return address;
     }
 
-    // hashCode method
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email);
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    // toString method
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
                 ", department='" + department + '\'' +
+                ", dob='" + dob + '\'' +
+                ", email='" + email + '\'' +
+                ", notes='" + notes + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }

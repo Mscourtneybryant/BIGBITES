@@ -8,6 +8,8 @@ import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 import { Alert, AlertDescription } from "../components/ui/alert"
 import { Loader2 } from "lucide-react"
+import orngBackground from '../photos/orng.gif';
+import Footer from '../components/Footer';
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
@@ -50,55 +52,58 @@ const SignIn = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
-                <h1 className="text-2xl font-semibold mb-6 text-center">Sign In</h1>
-                {error && (
-                    <Alert variant="destructive" className="mb-4">
-                        <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                )}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="Enter your email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            autoComplete="username"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            autoComplete="current-password"
-                        />
-                    </div>
-                    <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full"
-                    >
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Signing In...
-                            </>
-                        ) : (
-                            'Sign In'
-                        )}
-                    </Button>
-                </form>
+        <div className="flex flex-col min-h-screen">
+            <div className="flex-grow flex justify-center items-center bg-gray-100" style={{backgroundImage: `url(${orngBackground})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+                <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
+                    <h1 className="text-2xl font-semibold mb-6 text-center">Sign In</h1>
+                    {error && (
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                autoComplete="username"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                autoComplete="current-password"
+                            />
+                        </div>
+                        <Button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-primary hover:bg-hoverClr"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Signing In...
+                                </>
+                            ) : (
+                                'Sign In'
+                            )}
+                        </Button>
+                    </form>
+                </div>
             </div>
+            <Footer />
         </div>
     );
 };

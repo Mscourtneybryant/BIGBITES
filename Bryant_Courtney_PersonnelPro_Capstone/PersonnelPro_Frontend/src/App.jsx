@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import Homepage from "./components/Homepage";
+import Dashboard from "./components/Dashboard"; 
 import { setCredentials } from "./redux/authSlice";
 
 const App = () => {
@@ -14,19 +15,19 @@ const App = () => {
 
     useEffect(() => {
         if (token && !user) {
-            // Here you would typically make an API call to get the user data
-            // For now, we'll just set a placeholder user object
+            
             dispatch(setCredentials({ user: { id: 1, name: 'User' }, token }));
         }
     }, [dispatch, token, user]);
 
     return (
         <Router>
-            <NavBar />
+            <NavBar isLoggedIn={!!user} /> 
             <Routes>
                 <Route path="/login" element={user ? <Navigate to="/home" /> : <SignIn />} />
                 <Route path="/signup" element={user ? <Navigate to="/home" /> : <SignUp />} />
                 <Route path="/home" element={user ? <Homepage /> : <Navigate to="/login" />} />
+                <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
                 <Route path="*" element={user ? <Navigate to="/home" /> : <Navigate to="/login" />} />
             </Routes>
         </Router>

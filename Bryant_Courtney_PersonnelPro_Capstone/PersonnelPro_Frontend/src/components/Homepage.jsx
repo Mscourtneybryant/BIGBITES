@@ -21,17 +21,13 @@ const Homepage = () => {
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    if (token) {
-      fetchEmployees();
-      fetchEvents();
-      updateGreeting();
-      fetchPosts();
-      const intervalId = setInterval(updateGreeting, 60000);
-      return () => clearInterval(intervalId);
-    } else {
-      navigate('/login');
-    }
-  }, [token, dispatch, navigate]);
+    fetchEmployees();
+    updateGreeting();
+    fetchEvents();
+    fetchPosts();
+    const intervalId = setInterval(updateGreeting, 60000); // Update greeting every minute
+    return () => clearInterval(intervalId);
+  }, [token, dispatch]);
 
   const updateGreeting = () => {
     const currentHour = new Date().getHours();
@@ -43,10 +39,16 @@ const Homepage = () => {
     } else {
       greetingMessage = 'Good evening';
     }
-    setGreeting(`${greetingMessage}, ${user?.name || 'User'}!`);
+    setGreeting(`${greetingMessage}, ${user?.firstName || 'User'}!`);
   };
 
   const fetchEmployees = async () => {
+    if (!token) {
+      setLoading(false);
+      setError('No authentication token found. Please log in.');
+      return;
+    }
+
     try {
       const response = await axios.get('http://localhost:8080/api/employees', {
         headers: {
@@ -57,17 +59,18 @@ const Homepage = () => {
       setError(null);
     } catch (err) {
       console.error('Error fetching employees:', err);
-      if (err.response && err.response.status === 403) {
-        setError('Access forbidden. Please check your permissions.');
-      } else {
-        setError('Failed to fetch employees. Please try again.');
-      }
+      setError('Failed to fetch employees. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const fetchEvents = async () => {
+    if (!token) {
+      setError('No authentication token found. Please log in.');
+      return;
+    }
+
     try {
       const response = await axios.get('http://localhost:8080/api/events', {
         headers: {
@@ -80,19 +83,14 @@ const Homepage = () => {
       })));
     } catch (err) {
       console.error('Error fetching events:', err);
-      if (err.response && err.response.status === 403) {
-        setError('Access forbidden. Please check your permissions.');
-      } else {
-        setError('Failed to fetch events. Please try again.');
-      }
+      setError('Failed to fetch events. Please try again.');
     }
   };
 
   const fetchPosts = async () => {
-    // This is a mock function. In a real application, you would fetch posts from your backend.
     setPosts([
-      { id: 1, author: 'John Doe', content: 'Just completed the new project ahead of schedule!' },
-      { id: 2, author: 'Jane Smith', content: 'Looking for volunteers for the charity event next month.' },
+      { id: 1, author: 'John Doe', content: 'Just completed the new project ahead of schedule!', timestamp: new Date('2024-10-03T10:30:00') },
+      { id: 2, author: 'Jane Smith', content: 'Looking for volunteers for the charity event next month.', timestamp: new Date('2024-10-03T11:45:00') },
     ]);
   };
 
@@ -104,7 +102,15 @@ const Homepage = () => {
   const handleNewPost = (e) => {
     e.preventDefault();
     if (newPost.trim()) {
-      setPosts([...posts, { id: Date.now(), author: user?.name || 'Anonymous', content: newPost }]);
+      setPosts([
+        { 
+          id: Date.now(), 
+          author: user?.name || 'Anonymous', 
+          content: newPost,
+          timestamp: new Date()
+        },
+        ...posts
+      ]);
       setNewPost('');
     }
   };
@@ -116,20 +122,12 @@ const Homepage = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
-  if (error) {
+  if (!token) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
           <strong className="font-bold">Error: </strong>
-          <span className="block sm:inline">{error}</span>
+          <span className="block sm:inline">No authentication token found. Please log in.</span>
         </div>
       </div>
     );
@@ -142,14 +140,14 @@ const Homepage = () => {
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <span className="text-lg font-semibold">Employee Management System</span>
+                <span className="text-lg font-semibold">Personnel Pro Employee Management System</span>
               </div>
             </div>
             <div className="flex items-center">
-              <span className="text-sm font-medium text-gray-500 mr-4">{greeting}</span>
+              <span className="text-sm font-medium text-gray-500 mr-4 ">{greeting}</span>
               <button
                 onClick={handleLogout}
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                className="text-sm font-medium text-hoverClr"
               >
                 Logout
               </button>
@@ -158,11 +156,11 @@ const Homepage = () => {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">Company Calendar</h3>
+            <div className="px-4 py-5 sm:px-6 bg-gray-800">
+              <h3 className="text-lg leading-6 font-medium text-white">Company Calendar</h3>
             </div>
             <div className="px-4 py-5 sm:p-6">
               <Calendar
@@ -174,8 +172,8 @@ const Homepage = () => {
           </div>
 
           <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">Social Feed</h3>
+            <div className="px-4 py-5 sm:px-6 bg-gray-800">
+              <h3 className="text-lg leading-6 font-medium text-white">Social Feed</h3>
             </div>
             <div className="px-4 py-5 sm:p-6">
               <form onSubmit={handleNewPost} className="mb-4">
@@ -186,12 +184,15 @@ const Homepage = () => {
                   rows="4"
                   placeholder="Share an update..."
                 ></textarea>
-                <button type="submit" className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Post</button>
+                <button type="submit" className="mt-2 px-4 py-2 bg-primary shadow-md hover:bg-hoverClr hover:translate-y-0.5 text-black rounded hover:bg-blue-600">Post</button>
               </form>
               {posts.map((post) => (
                 <div key={post.id} className="mb-4 p-4 bg-gray-50 rounded-lg">
                   <p className="font-semibold">{post.author}</p>
                   <p>{post.content}</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {post.timestamp.toLocaleString()}
+                  </p>
                 </div>
               ))}
             </div>
@@ -199,27 +200,42 @@ const Homepage = () => {
         </div>
 
         <div className="mt-8 bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Employee List</h3>
+          <div className="px-4 py-5 sm:px-6 bg-gray-800">
+            <h3 className="text-lg leading-6 font-medium text-white">Employee List</h3>
           </div>
           <div className="px-4 py-5 sm:p-6">
-            {employees.length > 0 ? (
-              <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {employees.map((employee) => (
-                  <li key={employee.id} className="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200">
-                    <div className="w-full flex items-center justify-between p-6 space-x-6">
-                      <div className="flex-1 truncate">
-                        <div className="flex items-center space-x-3">
-                          <h3 className="text-gray-900 text-sm font-medium truncate">{employee.firstName} {employee.lastName}</h3>
-                        </div>
-                        <p className="mt-1 text-gray-500 text-sm truncate">{employee.email}</p>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+              </div>
+            ) : error ? (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong className="font-bold">Error: </strong>
+                <span className="block sm:inline">{error}</span>
+              </div>
             ) : (
-              <p className="text-center text-gray-500">No employees found.</p>
+              <div>
+                {employees.length > 0 ? (
+                  <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {employees.map((employee) => (
+                      <li key={employee.id} className="col-span-1 bg-white hover:bg-hoverClr rounded-lg shadow divide-y divide-gray-200">
+                        <div className="w-full flex items-center justify-between p-6 space-x-6">
+                          <div className="flex-1 truncate">
+                            <div className="flex items-center space-x-3">
+                              <h3 className="text-gray-900 text-sm font-medium truncate">{employee.firstName} {employee.lastName}</h3>
+                            </div>
+                            <p className="mt-1 text-gray-500 text-sm truncate">{employee.email}</p>
+                            <p className="mt-1 text-gray-500 text-sm truncate">{employee.department}</p>
+                            <button>Send a Message</button>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-center text-gray-500">No employees found.</p>
+                )}
+              </div>
             )}
           </div>
         </div>
