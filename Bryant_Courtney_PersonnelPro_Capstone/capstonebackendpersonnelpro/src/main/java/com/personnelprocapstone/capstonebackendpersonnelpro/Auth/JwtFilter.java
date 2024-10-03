@@ -1,6 +1,5 @@
 package com.personnelprocapstone.capstonebackendpersonnelpro.Auth;
 
-import com.personnelprocapstone.capstonebackendpersonnelpro.service.CustomUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,6 +33,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
+        logger.info("Processing request for URL: {}", request.getRequestURL());
+        logger.info("Authorization header: {}", authorizationHeader);
+
         String email = null;
         String jwt = null;
 
@@ -41,6 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             try {
                 email = jwtUtil.extractEmail(jwt);
+                logger.info("Extracted email from token: {}", email);
             } catch (ExpiredJwtException e) {
                 logger.error("Token expired", e);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -53,13 +56,17 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
         } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+            logger.warn("Authorization header is missing or does not start with 'Bearer '");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Missing or invalid Authorization header");
+            return;
         }
 
         logger.info("Processing request for email: {}", email);
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            logger.info("Loaded user details for email: {}", email);
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -67,12 +74,20 @@ public class JwtFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 logger.info("Authentication successful for user: {}", email);
+                logger.info("User authorities: {}", userDetails.getAuthorities());
             } else {
                 logger.warn("Token validation failed for user: {}", email);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token validation failed");
                 return;
             }
+        } else if (email == null) {
+            logger.warn("Email could not be extracted from token");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid token: email not found");
+            return;
+        } else {
+            logger.info("Authentication already exists in SecurityContext");
         }
 
         chain.doFilter(request, response);
@@ -81,6 +96,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.startsWith("/api/auth/");
+        boolean shouldNotFilter = path.startsWith("/api/auth/");
+        logger.info("Checking if should not filter: {} for path: {}", shouldNotFilter, path);
+        return shouldNotFilter;
     }
 }
